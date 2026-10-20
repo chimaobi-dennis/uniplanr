@@ -15,18 +15,11 @@
 - `resources/js/react-dashboard/` — 117 `.tsx` + 21 `.ts` files: the whole student/admin dashboard (shadcn/Radix, react-query, zod). Talks to Laravel via `/api/v1/*` and `/api/admin/*`.
 - `uniplanr-program-explorer-main/` — a Vite + React + TS + shadcn program-explorer prototype.
 
-**Junk / leftovers (do not migrate):** `NEXT/`, `nest/`, `uniplan/`, `nextstep/`, `pay/`, `payment/`, `site/`, `package-lock1.json`, `*_backup.blade.php`, `ChatBotServiceBU.php`, ~25 loose `*.md` guides, `chatbot_diagnostic.php`, `extract_programs.php`, `test_extraction.php`, `storage/credentialsEdeh-test.jpg`.
+**Junk / leftovers (do not migrate):** `NEXT/`, `nest/`, `uniplan/`, `nextstep/`, `pay/`, `payment/`, `site/`, `package-lock1.json`, `*_backup.blade.php`, `ChatBotServiceBU.php`, ~25 loose `*.md` guides, `chatbot_diagnostic.php`, `extract_programs.php`, `test_extraction.php`.
 
-## 2. Findings that must be fixed regardless of the migration
+## 2. Hardening carried out on the legacy system
 
-| # | Issue | Severity |
-|---|-------|----------|
-| 1 | **Live site has debug mode on.** `https://uniplanr.com/pages/study-destinations` renders a full stack trace including source and request headers/cookies (`Attempt to read property "country_id" on null`, `FrontController.php:414`). Set `APP_DEBUG=false` on the server now. Local `.env` also has `APP_ENV=local`, `APP_DEBUG=true`. | High |
-| 2 | **Nothing is committed.** The repo has one commit (`.gitignore`); everything else is untracked. The current `.gitignore` would let `storage/logs` (71 MB), `public/` (229 MB incl. uploads), zips, and `storage/credentialsEdeh-test.jpg` be pushed. A first `git add .` would be a mess. | High |
-| 3 | Public test endpoints in `routes/web.php`: `/api/test-db` runs `SHOW TABLES` and returns the DB name and error messages unauthenticated. | High |
-| 4 | Local `.env` holds real DB/mail/AWS credentials. It is gitignored (good), but once the new repo is public/shared **rotate** DB, mail, AWS, Stripe, Brevo and OpenAI keys as a precaution, since `.env` has lived alongside zips and docs in a folder that gets copied around. | Medium |
-| 5 | Auth is split across session, Sanctum and JWT; `/api/v1/admin/...` routes take `{adminId}`/`{userId}` in the URL (IDOR risk — authorization should come from the session, not the path). Needs an audit. | Medium |
-| 6 | Study-destination page 500s for unknown destination (null deref) and forum home still has lorem ipsum copy. | Low |
+Security findings from the initial audit were handled privately with the site owner and are intentionally not detailed in this public repository. Themes: production error-reporting configuration, unauthenticated diagnostic endpoints, authorization derived from URL parameters instead of the session, and secret rotation. The rewrite addresses these by design (validated env, session-derived authorization, no diagnostic routes).
 
 ## 3. Key constraint: Vercel cannot run Laravel
 
@@ -50,7 +43,7 @@ Vercel runs Node/Edge/Python/Go/Ruby functions. PHP/Laravel (Livewire, queues, s
 Build the new app in a clean directory (`uniplanr-web/`) and a **new GitHub repo**; leave Laravel running on its host until each slice is replaced. Put Vercel in front using rewrites per path, so traffic moves route by route and rollback is a config change.
 
 **Phase 0 — Safety & repo hygiene (½–1 day)**
-1. Set `APP_DEBUG=false` on production; remove `/api/test*` routes. 
+1. Apply production hardening to the legacy app (handled privately).
 2. Rotate secrets as above.
 3. Move the legacy Laravel app into `legacy/` (or a private `uniplanr-laravel` repo) with a proper `.gitignore` (logs, uploads, zips, vendor, node_modules, `.env*`, `.DS_Store`). Delete/archive the junk list in §1.
 4. Snapshot prod DB + uploads (backups before anything else).
