@@ -1,14 +1,21 @@
+import { Hero } from "@/components/home/hero";
+import { Features } from "@/components/home/features";
+import { ProgramsPreview } from "@/components/home/programs-preview";
+import { Journey } from "@/components/home/journey";
+import { Stats } from "@/components/home/stats";
+import { Faq } from "@/components/home/faq";
+import { Cta } from "@/components/home/cta";
+
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center gap-4 px-6">
-      <h1 className="text-4xl font-semibold tracking-tight">Uniplanr</h1>
-      <p className="text-lg text-zinc-600">
-        Your global study lifetool. The Next.js rewrite is in progress; the live product is at{" "}
-        <a className="underline" href="https://uniplanr.com">
-          uniplanr.com
-        </a>
-        .
-      </p>
-    </main>
+    <>
+      <Hero />
+      <Features />
+      <ProgramsPreview />
+      <Journey />
+      <Stats />
+      <Faq />
+      <Cta />
+    </>
   );
 }
