@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { links, nav } from "@/lib/links";
 import { ButtonLink } from "@/components/ui/button";
+import { SmartLink } from "@/components/ui/smart-link";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -19,9 +20,9 @@ export function SiteHeader() {
 
           <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
             {nav.map((item) => (
-              <a key={item.label} href={item.href} className="text-sm font-medium text-white/80 transition-colors hover:text-white">
+              <SmartLink key={item.label} href={item.href} className="text-sm font-medium text-white/80 transition-colors hover:text-white">
                 {item.label}
-              </a>
+              </SmartLink>
             ))}
           </nav>
 
@@ -45,9 +46,9 @@ export function SiteHeader() {
         {open && (
           <nav id="mobile-menu" aria-label="Mobile" className="mt-3 flex flex-col gap-1 border-t border-white/10 pb-2 pt-3 md:hidden">
             {nav.map((item) => (
-              <a key={item.label} href={item.href} className="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">
+              <SmartLink key={item.label} href={item.href} className="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">
                 {item.label}
-              </a>
+              </SmartLink>
             ))}
             <ButtonLink href={links.getStarted} className="mt-2">
               Get Started
