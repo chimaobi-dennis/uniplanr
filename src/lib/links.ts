@@ -2,7 +2,7 @@
 const LEGACY = "https://uniplanr.com";
 
 export const links = {
-  programs: `${LEGACY}/pages/programs`,
+  programs: "/programs",
   community: `${LEGACY}/forum/home`,
   partners: `${LEGACY}/pages/university/partnerships`,
   blog: `${LEGACY}/blog/home`,
