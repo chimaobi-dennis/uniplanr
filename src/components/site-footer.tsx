@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { links } from "@/lib/links";
+import { SmartLink } from "@/components/ui/smart-link";
 
 const columns = [
   {
@@ -48,9 +49,9 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-3">
               {col.items.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} className="text-sm text-white/60 transition-colors hover:text-white">
+                  <SmartLink href={item.href} className="text-sm text-white/60 transition-colors hover:text-white">
                     {item.label}
-                  </a>
+                  </SmartLink>
                 </li>
               ))}
             </ul>
